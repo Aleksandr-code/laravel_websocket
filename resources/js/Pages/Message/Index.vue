@@ -40,6 +40,19 @@ export default {
         }
     },
 
+    mounted() {
+        Echo.channel(`message-public-submitted`)
+            .listen('.message.store', (e) => {
+                console.log(e.message);
+                this.messages.unshift(e.message);
+            });
+        // Echo.private(`message-private-submitted.${this.$attrs.auth.user.id}`)
+        //     .listen('.message.store', (e) => {
+        //         console.log(e.message);
+        //         this.messages.unshift(e.message);
+        //     });
+    },
+
     methods:{
         storeMessage(){
             //this.$inertia.post('/message', {text: this.text})
@@ -48,6 +61,7 @@ export default {
                     res => {
                         console.log(res.data);
                         this.messages.unshift(res.data);
+
                     }
                 ).catch(er => {
                     console.log(er)
